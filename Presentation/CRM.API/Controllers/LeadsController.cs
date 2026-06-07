@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CRM.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
     public class LeadsController(ILeadService leadService) : ControllerBase

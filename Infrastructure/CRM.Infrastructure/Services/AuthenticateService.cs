@@ -18,8 +18,8 @@ namespace CRM.Infrastructure.Services
             var user = await GetByEmailAsync(email);
             if (user is null)
                 return null!;
-            if (!user.IsEmailConfirmed || user.IsDeleted)
-                throw new UnauthorizedAccessException("Your email is not confirmed");
+            if (user.IsDeleted)
+                throw new UnauthorizedAccessException("Your email has been deleted");
             if (new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash, password)
                 is PasswordVerificationResult.Failed)
                 throw new UnauthorizedAccessException("Invalid credentials");

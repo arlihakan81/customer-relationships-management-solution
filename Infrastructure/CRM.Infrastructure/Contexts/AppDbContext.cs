@@ -15,6 +15,9 @@ namespace CRM.Infrastructure.Contexts
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Lead> Leads { get; set; }
+        public DbSet<LeadSource> LeadSources { get; set; }
+        public DbSet<LeadLabel> LeadLabels { get; set; }
+        public DbSet<Label> Labels { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -26,6 +29,9 @@ namespace CRM.Infrastructure.Contexts
             modelBuilder.Entity<Customer>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);
             modelBuilder.Entity<Contact>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);
             modelBuilder.Entity<Lead>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);
+            modelBuilder.Entity<LeadSource>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);
+            modelBuilder.Entity<LeadLabel>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);            
+            modelBuilder.Entity<Label>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);            
 
             modelBuilder.Entity<Customer>().HasOne(c => c.CreatedBy).WithMany().HasForeignKey(c => c.CreatedById).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Customer>().HasOne(c => c.ModifiedBy).WithMany().HasForeignKey(c => c.ModifiedById);
@@ -38,6 +44,22 @@ namespace CRM.Infrastructure.Contexts
             modelBuilder.Entity<Lead>().HasOne(c => c.CreatedBy).WithMany().HasForeignKey(c => c.CreatedById).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Lead>().HasOne(c => c.ModifiedBy).WithMany().HasForeignKey(c => c.ModifiedById);
             modelBuilder.Entity<Lead>().HasOne(c => c.DeletedBy).WithMany().HasForeignKey(c => c.DeletedById);
+
+            modelBuilder.Entity<LeadSource>().HasOne(c => c.CreatedBy).WithMany().HasForeignKey(c => c.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<LeadSource>().HasOne(c => c.ModifiedBy).WithMany().HasForeignKey(c => c.ModifiedById);
+            modelBuilder.Entity<LeadSource>().HasOne(c => c.DeletedBy).WithMany().HasForeignKey(c => c.DeletedById);
+
+            modelBuilder.Entity<LeadLabel>().HasOne(c => c.CreatedBy).WithMany().HasForeignKey(c => c.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<LeadLabel>().HasOne(c => c.ModifiedBy).WithMany().HasForeignKey(c => c.ModifiedById);
+            modelBuilder.Entity<LeadLabel>().HasOne(c => c.DeletedBy).WithMany().HasForeignKey(c => c.DeletedById);
+
+            modelBuilder.Entity<Label>().HasOne(c => c.CreatedBy).WithMany().HasForeignKey(c => c.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Label>().HasOne(c => c.ModifiedBy).WithMany().HasForeignKey(c => c.ModifiedById);
+            modelBuilder.Entity<Label>().HasOne(c => c.DeletedBy).WithMany().HasForeignKey(c => c.DeletedById);
+            
+            modelBuilder.Entity<Label>().HasMany(l => l.Leads).WithMany(l => l.Labels).UsingEntity<LeadLabel>();
+
+
         }
 
         public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -47,7 +69,7 @@ namespace CRM.Infrastructure.Contexts
             foreach (var entry in entries)
             {
                 var entity = (BaseEntity<Guid>)entry.Entity;
-                var now = DateTime.UtcNow;
+                var now = DateTime.Now;
 
                 if (entry.State == EntityState.Added)
                 {

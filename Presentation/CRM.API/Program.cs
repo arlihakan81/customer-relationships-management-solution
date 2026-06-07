@@ -90,6 +90,12 @@ builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 builder.Services.AddScoped<ILeadService, LeadService>();
 
+builder.Services.AddScoped<ILeadSourceRepository, LeadSourceRepository>();
+builder.Services.AddScoped<ILeadSourceService, LeadSourceService>();
+
+builder.Services.AddScoped<ILabelRepository, LabelRepository>();
+builder.Services.AddScoped<ILabelService, LabelService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
