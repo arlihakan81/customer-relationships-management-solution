@@ -21,9 +21,17 @@ namespace CRM.Infrastructure.Services
             await _labelRepository.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<LabelDto>?> GetAllLabelsAsync()
+        public async Task<IEnumerable<LabelDto>?> GetAllLabelsAsync(int page = 1, int limit = 100, string? filter = null)
         {
-            var leadLabels = await _labelRepository.GetAllAsync();
+            var leadLabels = await _labelRepository.GetAllAsync(page,limit);
+            if (filter is null)
+            {
+                return _mapper.Map<IEnumerable<LabelDto>>(leadLabels);
+            }
+            else
+            {
+                leadLabels = await _labelRepository.GetAllAsync(page, limit, l => l.Name.Contains(filter));
+            }
             return _mapper.Map<IEnumerable<LabelDto>>(leadLabels);
         }
 

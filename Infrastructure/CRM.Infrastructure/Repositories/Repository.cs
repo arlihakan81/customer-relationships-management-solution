@@ -23,9 +23,10 @@ namespace CRM.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public virtual async Task<IEnumerable<T>?> GetAllAsync(Expression<Func<T, bool>>? expression = null)
+        public virtual async Task<IEnumerable<T>?> GetAllAsync(int page = 1, int limit = 100, Expression<Func<T, bool>>? expression = null)
         {
-            return expression is null ? await _context.Set<T>().ToListAsync() : await _context.Set<T>().Where(expression).ToListAsync();
+            return expression is null ? await _context.Set<T>().Skip((page - 1)*limit).Take(limit).ToListAsync() : 
+                await _context.Set<T>().Where(expression).Skip((page - 1)*limit).Take(limit).ToListAsync();
         }
 
         public virtual async Task<T?> GetByIdAsync(Guid id)

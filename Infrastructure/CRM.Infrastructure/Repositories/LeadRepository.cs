@@ -10,10 +10,10 @@ namespace CRM.Infrastructure.Repositories
     {
         private readonly AppDbContext _context = context;
 
-        public override async Task<IEnumerable<Lead>?> GetAllAsync(Expression<Func<Lead, bool>>? expression = null)
+        public override async Task<IEnumerable<Lead>?> GetAllAsync(int page = 1, int limit = 100, Expression<Func<Lead, bool>>? expression = null)
         {
-            return expression is null ? await _context.Leads.Include(l => l.Source).Include(l => l.Labels).ToListAsync() :
-                await _context.Leads.Include(l => l.Source).Include(l => l.Labels).Where(expression).ToListAsync();
+            return expression is null ? await _context.Leads.Include(l => l.Source).Include(l => l.Labels).Skip((page - 1)*limit).Take(limit).ToListAsync() :
+                await _context.Leads.Include(l => l.Source).Include(l => l.Labels).Where(expression).Skip((page - 1)*limit).Take(limit).ToListAsync();
         }
 
         public override async Task<Lead?> GetByIdAsync(Guid id)

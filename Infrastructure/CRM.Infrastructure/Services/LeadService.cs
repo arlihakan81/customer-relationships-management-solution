@@ -26,9 +26,17 @@ namespace CRM.Infrastructure.Services
             await _leadRepository.DeleteAsync(leadId);
         }
 
-        public async Task<IEnumerable<LeadDto>?> GetAllLeadsAsync()
+        public async Task<IEnumerable<LeadDto>?> GetAllLeadsAsync(int page = 1, int limit = 100, string? filter = null)
         {
-            var leads = await _leadRepository.GetAllAsync();
+            var leads = await _leadRepository.GetAllAsync(page, limit);
+            if (filter is null)
+            {
+                return _mapper.Map<IEnumerable<LeadDto>>(leads);
+            }
+            else
+            {
+                leads = await _leadRepository.GetAllAsync(page, limit, l => l.Name.Contains(filter!) || l.Email.Contains(filter!) || l.Phone.Contains(filter!));
+            }
             return _mapper.Map<IEnumerable<LeadDto>>(leads);
         }
 

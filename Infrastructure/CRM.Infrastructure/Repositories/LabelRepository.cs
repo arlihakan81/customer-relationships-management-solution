@@ -10,12 +10,6 @@ namespace CRM.Infrastructure.Repositories
     {
         private readonly AppDbContext _context = context;
 
-        public override async Task<IEnumerable<Label>?> GetAllAsync(Expression<Func<Label, bool>>? expression = null)
-        {
-            return expression is null ? await _context.Labels.ToListAsync() :
-                await _context.Labels.Where(expression).ToListAsync();
-        }
-
 
     }
 }

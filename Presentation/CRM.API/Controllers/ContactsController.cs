@@ -3,6 +3,7 @@ using CRM.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace CRM.API.Controllers
 {
@@ -14,9 +15,9 @@ namespace CRM.API.Controllers
         private readonly IContactService _contactService = contactService;
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int limit = 100, [FromQuery] string? filter = null)
         {
-            var contacts = await _contactService.GetAllContactsAsync();
+            var contacts = await _contactService.GetAllContactsAsync(page,limit,filter);
             return Ok(contacts);
         }
 

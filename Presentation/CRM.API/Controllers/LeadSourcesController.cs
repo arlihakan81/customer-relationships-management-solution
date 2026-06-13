@@ -12,9 +12,9 @@ namespace CRM.API.Controllers
         private readonly ILeadSourceService _leadSourceService = leadSourceService;
 
         [HttpGet]
-        public async Task<IActionResult> GetAllLeadSources()
+        public async Task<IActionResult> GetAllLeadSources([FromQuery] int page = 1, [FromQuery] int limit = 100, [FromQuery] string? filter = null)
         {
-            var leadSources = await _leadSourceService.GetAllLeadSourcesAsync();
+            var leadSources = await _leadSourceService.GetAllLeadSourcesAsync(page,limit,filter);
             if (leadSources is null)
             {
                 return Ok(new List<LeadSourceDto>());

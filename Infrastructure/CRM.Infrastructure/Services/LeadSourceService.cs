@@ -21,9 +21,17 @@ namespace CRM.Infrastructure.Services
             await _leadSourceRepository.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<LeadSourceDto>?> GetAllLeadSourcesAsync()
+        public async Task<IEnumerable<LeadSourceDto>?> GetAllLeadSourcesAsync(int page = 1, int limit = 100, string? filter = null)
         {
-            var leadSources = await _leadSourceRepository.GetAllAsync();
+            var leadSources = await _leadSourceRepository.GetAllAsync(page,limit);
+            if(filter is null)
+            {
+                return _mapper.Map<IEnumerable<LeadSourceDto>>(leadSources);
+            }
+            else
+            {
+                leadSources = await _leadSourceRepository.GetAllAsync(page, limit, ls => ls.Name.Contains(filter));
+            }
             return _mapper.Map<IEnumerable<LeadSourceDto>>(leadSources);
         }
 

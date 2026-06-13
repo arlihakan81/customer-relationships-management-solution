@@ -2,6 +2,7 @@
 using CRM.Application.Dtos.Contact;
 using CRM.Application.Interfaces;
 using CRM.Application.Repositories;
+using System.Reflection.Metadata;
 
 namespace CRM.Infrastructure.Services
 {
@@ -20,9 +21,17 @@ namespace CRM.Infrastructure.Services
             await _contactRepository.DeleteAsync(contactId);
         }
 
-        public async Task<IEnumerable<ContactDto>?> GetAllContactsAsync()
+        public async Task<IEnumerable<ContactDto>?> GetAllContactsAsync(int page = 1, int limit = 100, string? filter = null)
         {
-            var contacts = await _contactRepository.GetAllAsync();
+            var contacts = await _contactRepository.GetAllAsync(page, limit);
+            if(filter is null)
+            {
+                return _mapper.Map<IEnumerable<ContactDto>>(contacts);
+            }
+            else
+            {
+                contacts = await _contactRepository.GetAllAsync(page, limit, c => c.Name.Contains(filter!) || c.Email.Contains(filter!) || c.Phone.Contains(filter!));
+            }
             return _mapper.Map<IEnumerable<ContactDto>>(contacts);
         }
 
@@ -32,9 +41,9 @@ namespace CRM.Infrastructure.Services
             return _mapper.Map<ContactDto>(contact);
         }
 
-        public async Task<IEnumerable<ContactDto>?> GetContactsByCustomerIdAsync(Guid customerId)
+        public async Task<IEnumerable<ContactDto>?> GetContactsByCustomerIdAsync(Guid customerId, int page = 1, int limit = 100)
         {
-            var contacts = await _contactRepository.GetAllAsync(c => c.CustomerId == customerId);
+            var contacts = await _contactRepository.GetAllAsync(page, limit, c => c.CustomerId == customerId);
             return _mapper.Map<IEnumerable<ContactDto>>(contacts);
         }
 

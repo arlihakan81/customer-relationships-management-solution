@@ -18,6 +18,12 @@ namespace CRM.Infrastructure.Contexts
         public DbSet<LeadSource> LeadSources { get; set; }
         public DbSet<LeadLabel> LeadLabels { get; set; }
         public DbSet<Label> Labels { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Pipeline> Pipelines { get; set; }
+        public DbSet<Stage> Stages { get; set; }
+        public DbSet<Deal> Deals { get; set; }
+        public DbSet<DealItem> DealItems { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,10 +34,15 @@ namespace CRM.Infrastructure.Contexts
         {
             modelBuilder.Entity<Customer>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);
             modelBuilder.Entity<Contact>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);
-            modelBuilder.Entity<Lead>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);
-            modelBuilder.Entity<LeadSource>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);
-            modelBuilder.Entity<LeadLabel>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);            
-            modelBuilder.Entity<Label>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);            
+            modelBuilder.Entity<Lead>().HasQueryFilter(l => l.OrganizationId == _organizationService.GetCurrentOrganizationId() && !l.IsDeleted);
+            modelBuilder.Entity<LeadSource>().HasQueryFilter(ls => ls.OrganizationId == _organizationService.GetCurrentOrganizationId() && !ls.IsDeleted);
+            modelBuilder.Entity<LeadLabel>().HasQueryFilter(ll => ll.OrganizationId == _organizationService.GetCurrentOrganizationId() && !ll.IsDeleted);
+            modelBuilder.Entity<Label>().HasQueryFilter(l => l.OrganizationId == _organizationService.GetCurrentOrganizationId() && !l.IsDeleted); 
+            modelBuilder.Entity<Product>().HasQueryFilter(p => p.OrganizationId == _organizationService.GetCurrentOrganizationId() && !p.IsDeleted); 
+            modelBuilder.Entity<Pipeline>().HasQueryFilter(p => p.OrganizationId == _organizationService.GetCurrentOrganizationId() && !p.IsDeleted); 
+            modelBuilder.Entity<Stage>().HasQueryFilter(s => s.OrganizationId == _organizationService.GetCurrentOrganizationId() && !s.IsDeleted); 
+            modelBuilder.Entity<Deal>().HasQueryFilter(d => d.OrganizationId == _organizationService.GetCurrentOrganizationId() && !d.IsDeleted); 
+            modelBuilder.Entity<DealItem>().HasQueryFilter(di => di.OrganizationId == _organizationService.GetCurrentOrganizationId() && !di.IsDeleted); 
 
             modelBuilder.Entity<Customer>().HasOne(c => c.CreatedBy).WithMany().HasForeignKey(c => c.CreatedById).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Customer>().HasOne(c => c.ModifiedBy).WithMany().HasForeignKey(c => c.ModifiedById);
@@ -41,25 +52,44 @@ namespace CRM.Infrastructure.Contexts
             modelBuilder.Entity<Contact>().HasOne(c => c.ModifiedBy).WithMany().HasForeignKey(c => c.ModifiedById);
             modelBuilder.Entity<Contact>().HasOne(c => c.DeletedBy).WithMany().HasForeignKey(c => c.DeletedById);
 
-            modelBuilder.Entity<Lead>().HasOne(c => c.CreatedBy).WithMany().HasForeignKey(c => c.CreatedById).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Lead>().HasOne(c => c.ModifiedBy).WithMany().HasForeignKey(c => c.ModifiedById);
-            modelBuilder.Entity<Lead>().HasOne(c => c.DeletedBy).WithMany().HasForeignKey(c => c.DeletedById);
+            modelBuilder.Entity<Lead>().HasOne(l => l.CreatedBy).WithMany().HasForeignKey(l => l.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Lead>().HasOne(l => l.ModifiedBy).WithMany().HasForeignKey(l => l.ModifiedById);
+            modelBuilder.Entity<Lead>().HasOne(l => l.DeletedBy).WithMany().HasForeignKey(l => l.DeletedById);
 
-            modelBuilder.Entity<LeadSource>().HasOne(c => c.CreatedBy).WithMany().HasForeignKey(c => c.CreatedById).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<LeadSource>().HasOne(c => c.ModifiedBy).WithMany().HasForeignKey(c => c.ModifiedById);
-            modelBuilder.Entity<LeadSource>().HasOne(c => c.DeletedBy).WithMany().HasForeignKey(c => c.DeletedById);
+            modelBuilder.Entity<LeadSource>().HasOne(ls => ls.CreatedBy).WithMany().HasForeignKey(ls => ls.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<LeadSource>().HasOne(ls => ls.ModifiedBy).WithMany().HasForeignKey(ls => ls.ModifiedById);
+            modelBuilder.Entity<LeadSource>().HasOne(ls => ls.DeletedBy).WithMany().HasForeignKey(ls => ls.DeletedById);
 
-            modelBuilder.Entity<LeadLabel>().HasOne(c => c.CreatedBy).WithMany().HasForeignKey(c => c.CreatedById).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<LeadLabel>().HasOne(c => c.ModifiedBy).WithMany().HasForeignKey(c => c.ModifiedById);
-            modelBuilder.Entity<LeadLabel>().HasOne(c => c.DeletedBy).WithMany().HasForeignKey(c => c.DeletedById);
+            modelBuilder.Entity<LeadLabel>().HasOne(ll => ll.CreatedBy).WithMany().HasForeignKey(ll => ll.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<LeadLabel>().HasOne(ll => ll.ModifiedBy).WithMany().HasForeignKey(ll => ll.ModifiedById);
+            modelBuilder.Entity<LeadLabel>().HasOne(ll => ll.DeletedBy).WithMany().HasForeignKey(ll => ll.DeletedById);
 
-            modelBuilder.Entity<Label>().HasOne(c => c.CreatedBy).WithMany().HasForeignKey(c => c.CreatedById).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Label>().HasOne(c => c.ModifiedBy).WithMany().HasForeignKey(c => c.ModifiedById);
-            modelBuilder.Entity<Label>().HasOne(c => c.DeletedBy).WithMany().HasForeignKey(c => c.DeletedById);
-            
+            modelBuilder.Entity<Label>().HasOne(l => l.CreatedBy).WithMany().HasForeignKey(l => l.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Label>().HasOne(l => l.ModifiedBy).WithMany().HasForeignKey(l => l.ModifiedById);
+            modelBuilder.Entity<Label>().HasOne(l => l.DeletedBy).WithMany().HasForeignKey(l => l.DeletedById);            
             modelBuilder.Entity<Label>().HasMany(l => l.Leads).WithMany(l => l.Labels).UsingEntity<LeadLabel>();
 
+            modelBuilder.Entity<Product>().HasOne(p => p.CreatedBy).WithMany().HasForeignKey(p => p.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Product>().HasOne(p => p.ModifiedBy).WithMany().HasForeignKey(p => p.ModifiedById);
+            modelBuilder.Entity<Product>().HasOne(p => p.DeletedBy).WithMany().HasForeignKey(p => p.DeletedById);
+            modelBuilder.Entity<Product>().HasMany(p => p.Deals).WithMany(d => d.Products).UsingEntity<DealItem>();
 
+            modelBuilder.Entity<Pipeline>().HasOne(p => p.CreatedBy).WithMany().HasForeignKey(p => p.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Pipeline>().HasOne(p => p.ModifiedBy).WithMany().HasForeignKey(p => p.ModifiedById);
+            modelBuilder.Entity<Pipeline>().HasOne(p => p.DeletedBy).WithMany().HasForeignKey(p => p.DeletedById);
+
+            modelBuilder.Entity<Deal>().HasOne(p => p.CreatedBy).WithMany().HasForeignKey(p => p.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Deal>().HasOne(p => p.ModifiedBy).WithMany().HasForeignKey(p => p.ModifiedById);
+            modelBuilder.Entity<Deal>().HasOne(p => p.DeletedBy).WithMany().HasForeignKey(p => p.DeletedById);
+            modelBuilder.Entity<Deal>().HasMany(d => d.Products).WithMany(p => p.Deals).UsingEntity<DealItem>();
+
+            modelBuilder.Entity<Stage>().HasOne(p => p.CreatedBy).WithMany().HasForeignKey(p => p.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Stage>().HasOne(p => p.ModifiedBy).WithMany().HasForeignKey(p => p.ModifiedById);
+            modelBuilder.Entity<Stage>().HasOne(p => p.DeletedBy).WithMany().HasForeignKey(p => p.DeletedById);
+
+            modelBuilder.Entity<DealItem>().HasOne(p => p.CreatedBy).WithMany().HasForeignKey(p => p.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<DealItem>().HasOne(p => p.ModifiedBy).WithMany().HasForeignKey(p => p.ModifiedById);
+            modelBuilder.Entity<DealItem>().HasOne(p => p.DeletedBy).WithMany().HasForeignKey(p => p.DeletedById);
         }
 
         public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

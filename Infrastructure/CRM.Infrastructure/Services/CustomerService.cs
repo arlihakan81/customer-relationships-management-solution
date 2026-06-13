@@ -21,9 +21,17 @@ namespace CRM.Infrastructure.Services
             await _customerRepository.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<CustomerDto>?> GetAllAsync()
+        public async Task<IEnumerable<CustomerDto>?> GetAllAsync(int page = 1, int limit = 100, string? filter = null)
         {
-            var customers = await _customerRepository.GetAllAsync();
+            var customers = await _customerRepository.GetAllAsync(page, limit);
+            if (filter is null)
+            {
+                return _mapper.Map<IEnumerable<CustomerDto>>(customers);
+            }
+            else
+            {
+                customers = await _customerRepository.GetAllAsync(page, limit, _ => _.Name.Contains(filter) || _.Email.Contains(filter) || _.Address!.Contains(filter));
+            }
             return _mapper.Map<IEnumerable<CustomerDto>>(customers);
         }
 

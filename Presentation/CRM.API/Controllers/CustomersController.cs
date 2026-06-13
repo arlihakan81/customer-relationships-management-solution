@@ -15,9 +15,9 @@ namespace CRM.API.Controllers
         private readonly IContactService _contactService = contactService;
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int limit = 100, [FromQuery] string? filter = null)
         {
-            var customers = await _customerService.GetAllAsync();
+            var customers = await _customerService.GetAllAsync(page,limit,filter);
             return Ok(customers);
         }
 

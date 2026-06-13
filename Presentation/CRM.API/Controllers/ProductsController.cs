@@ -1,4 +1,4 @@
-﻿using CRM.Application.Dtos.Label;
+﻿using CRM.Application.Dtos.Product;
 using CRM.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,45 +7,45 @@ namespace CRM.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class LabelsController(ILabelService leadLabelService) : ControllerBase
+    public class ProductsController(IProductService productService) : ControllerBase
     {
-        private readonly ILabelService _leadLabelService = leadLabelService;
+        private readonly IProductService _productService = productService;
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int limit = 100, [FromQuery] string? filter = null)
         {
-            var leadLabels = await _leadLabelService.GetAllLabelsAsync(page,limit,filter);
-            if (leadLabels is null)
+            var products = await _productService.GetAllProductsAsync(page, limit, filter);
+            if (products is null)
             {
-                return Ok(new List<LabelDto>());
+                return Ok(new List<Application.Dtos.Product.ProductDto>());
             }
-            return Ok(leadLabels);
+            return Ok(products);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var leadLabel = await _leadLabelService.GetLabelAsync(id);
-            if (leadLabel is null)
+            var product = await _productService.GetProductByIdAsync(id);
+            if (product is null)
             {
                 return NotFound();
             }
-            return Ok(leadLabel);
+            return Ok(product);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(CreateLabelDto createLeadLabelDto)
+        public async Task<IActionResult> Post([FromBody] CreateProductDto createProductDto)
         {
-            await _leadLabelService.CreateLabelAsync(createLeadLabelDto);
+            await _productService.CreateProductAsync(createProductDto);
             return Created();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, UpdateLabelDto updateLeadLabelDto)
+        public async Task<IActionResult> Put(Guid id, [FromBody] UpdateProductDto updateProductDto)
         {
             try
             {
-                await _leadLabelService.UpdateLabelAsync(id, updateLeadLabelDto);
+                await _productService.UpdateProductAsync(id, updateProductDto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -59,7 +59,7 @@ namespace CRM.API.Controllers
         {
             try
             {
-                await _leadLabelService.DeleteLabelAsync(id);
+                await _productService.DeleteProductAsync(id);
                 return NoContent();
             }
             catch (Exception ex)
@@ -67,14 +67,6 @@ namespace CRM.API.Controllers
                 return NotFound(ex.Message);
             }
         }
-
-
-
-
-
-
-
-
 
     }
 }

@@ -4,7 +4,7 @@ namespace CRM.Application.Interfaces
 {
     public interface ILeadService
     {
-        Task<IEnumerable<LeadDto>?> GetAllLeadsAsync();
+        Task<IEnumerable<LeadDto>?> GetAllLeadsAsync(int page = 1, int limit = 100, string? filter = null);
         Task<LeadDto?> GetLeadByIdAsync(Guid leadId);
 
         Task CreateLeadAsync(CreateLeadDto createLeadDto);
