@@ -7,6 +7,10 @@ using CRM.Application.Dtos.LeadSource;
 using CRM.Domain.Entities;
 using CRM.Application.Dtos.LeadLabel;
 using CRM.Application.Dtos.Product;
+using CRM.Application.Dtos.Pipeline;
+using CRM.Application.Dtos.Stage;
+using CRM.Application.Dtos.Deal;
+using CRM.Application.Dtos.DealItem;
 
 namespace CRM.Application.Mapping
 {
@@ -43,6 +47,28 @@ namespace CRM.Application.Mapping
                 .ForMember(des => des.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt))
                 .ForMember(des => des.ModifiedDate, opt => opt.MapFrom(src => src.ModifiedAt));
             CreateMap<CreateProductDto, Product>();
+
+            CreateMap<Pipeline, PipelineDto>().ForMember(des => des.PipelineId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(des => des.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt))
+                .ForMember(des => des.ModifiedDate, opt => opt.MapFrom(src => src.ModifiedAt));
+            CreateMap<CreatePipelineDto, Pipeline>();
+
+            CreateMap<Stage, StageDto>().ForMember(des => des.StageId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(des => des.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt))
+                .ForMember(des => des.ModifiedDate, opt => opt.MapFrom(src => src.ModifiedAt));
+            CreateMap<CreateStageDto, Stage>();
+
+            CreateMap<Deal, DealDto>().ForMember(des => des.DealId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(des => des.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt))
+                .ForMember(des => des.ModifiedDate, opt => opt.MapFrom(src => src.ModifiedAt));
+            CreateMap<CreateDealDto, Deal>();
+
+            CreateMap<DealItem, DealItemDto>().ForMember(des => des.ProductId, opt => opt.MapFrom(src => src.ProductId))
+                .ForMember(des => des.Quantity, opt => opt.MapFrom(src => src.Quantity))
+                .ForMember(des => des.Price, opt => opt.MapFrom(src => src.UnitPrice));
+
+            CreateMap<DealItemDto, Product>();
+
         }
 
 

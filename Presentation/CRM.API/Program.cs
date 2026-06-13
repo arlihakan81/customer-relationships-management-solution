@@ -16,6 +16,7 @@ builder.Services.AddControllers()
 .AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
 }
 );
 
@@ -98,6 +99,15 @@ builder.Services.AddScoped<ILabelService, LabelService>();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+
+builder.Services.AddScoped<IPipelineRepository, PipelineRepository>();
+builder.Services.AddScoped<IPipelineService, PipelineService>();
+
+builder.Services.AddScoped<IStageRepository, StageRepository>();
+builder.Services.AddScoped<IStageService, StageService>();
+
+builder.Services.AddScoped<IDealRepository, DealRepository>();
+builder.Services.AddScoped<IDealService, DealService>();
 
 var app = builder.Build();
 
