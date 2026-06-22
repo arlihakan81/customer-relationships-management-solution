@@ -1,5 +1,6 @@
 ﻿using CRM.Application.Dtos.Stage;
 using CRM.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace CRM.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class StagesController(IStageService stageService) : ControllerBase
     {
         private readonly IStageService _stageService = stageService;

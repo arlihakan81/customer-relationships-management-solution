@@ -24,13 +24,15 @@ namespace CRM.Infrastructure.Services
         public async Task<IEnumerable<ContactDto>?> GetAllContactsAsync(int page = 1, int limit = 100, string? filter = null)
         {
             var contacts = await _contactRepository.GetAllAsync(page, limit);
+            if (contacts is null)
+                return null;
             if(filter is null)
             {
                 return _mapper.Map<IEnumerable<ContactDto>>(contacts);
             }
             else
             {
-                contacts = await _contactRepository.GetAllAsync(page, limit, c => c.Name.Contains(filter!) || c.Email.Contains(filter!) || c.Phone.Contains(filter!));
+                contacts = await _contactRepository.GetAllAsync(page, limit, c => c.FirstName.Contains(filter!) || c.LastName.Contains(filter) || c.Email.Contains(filter!) || c.Phone!.Contains(filter!));
             }
             return _mapper.Map<IEnumerable<ContactDto>>(contacts);
         }
@@ -41,9 +43,9 @@ namespace CRM.Infrastructure.Services
             return _mapper.Map<ContactDto>(contact);
         }
 
-        public async Task<IEnumerable<ContactDto>?> GetContactsByCustomerIdAsync(Guid customerId, int page = 1, int limit = 100)
+        public async Task<IEnumerable<ContactDto>?> GetContactsByCompanyIdAsync(Guid companyId, int page = 1, int limit = 100)
         {
-            var contacts = await _contactRepository.GetAllAsync(page, limit, c => c.CustomerId == customerId);
+            var contacts = await _contactRepository.GetAllAsync(page, limit, c => c.CompanyId == companyId);
             return _mapper.Map<IEnumerable<ContactDto>>(contacts);
         }
 

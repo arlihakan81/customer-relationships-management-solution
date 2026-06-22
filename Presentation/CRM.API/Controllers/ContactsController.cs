@@ -1,5 +1,6 @@
 ﻿using CRM.Application.Dtos.Contact;
 using CRM.Application.Interfaces;
+using CRM.Application.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,16 +19,16 @@ namespace CRM.API.Controllers
         public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int limit = 100, [FromQuery] string? filter = null)
         {
             var contacts = await _contactService.GetAllContactsAsync(page,limit,filter);
-            return Ok(contacts);
+            return contacts is null || !contacts.Any() ? Ok(BaseResponse<ContactDto>.FailureResult(error: "No contacts found", null)) :
+                Ok(BaseResponse<ContactDto>.SuccessResult(contacts, page, limit));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
             var contact = await _contactService.GetContactByIdAsync(id);
-            if (contact == null)
-                return NotFound();
-            return Ok(contact);
+            return contact is null ? Ok(BaseResponse<ContactDto>.FailureResult(error: "Contact not found", null)) :
+                Ok(BaseResponse<ContactDto>.SuccessResult(contact));
         }
 
         [HttpPost]

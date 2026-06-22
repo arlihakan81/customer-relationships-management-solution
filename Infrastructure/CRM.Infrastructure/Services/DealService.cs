@@ -5,14 +5,16 @@ using CRM.Application.Repositories;
 
 namespace CRM.Infrastructure.Services
 {
-    public class DealService(IDealRepository dealRepository, IMapper mapper) : IDealService
+    public class DealService(IDealRepository dealRepository, IProductRepository productRepository, IMapper mapper) : IDealService
     {
         private readonly IDealRepository _dealRepository = dealRepository;
+        private readonly IProductRepository _productRepository = productRepository;
         private readonly IMapper _mapper = mapper;
 
         public async Task CreateDealAsync(CreateDealDto createDealDto)
         {
-            await _dealRepository.AddAsync(_mapper.Map<Domain.Entities.Deal>(createDealDto));
+            var deal = _mapper.Map<Domain.Entities.Deal>(createDealDto);
+            await _dealRepository.AddAsync(deal);
         }
 
         public async Task DeleteDealAsync(Guid id)
@@ -29,7 +31,7 @@ namespace CRM.Infrastructure.Services
             }
             else
             {
-                deals = await _dealRepository.GetAllAsync(page, limit, (_ => _.Name.Contains(filter) || _.Customer.Name.Contains(filter) || _.Stage.Name.Contains(filter)));
+                deals = await _dealRepository.GetAllAsync(page, limit, (_ => _.Name.Contains(filter) || _.Company.Name.Contains(filter) || _.Stage.Name.Contains(filter)));
             }
             return _mapper.Map<IEnumerable<DealDto>>(deals);
         }

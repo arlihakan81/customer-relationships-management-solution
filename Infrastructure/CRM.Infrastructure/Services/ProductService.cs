@@ -40,6 +40,12 @@ namespace CRM.Infrastructure.Services
             return _mapper.Map<ProductDto>(product);
         }
 
+        public async Task<IEnumerable<ProductDto>?> GetProductsByDealIdAsync(Guid dealId, int page = 1, int limit = 100)
+        {
+            var products = await _productRepository.GetProductsByDealIdAsync(dealId, page, limit);
+            return _mapper.Map<IEnumerable<ProductDto>>(products);
+        }
+
         public async Task UpdateProductAsync(Guid productId, UpdateProductDto updateProductDto)
         {
             var product = await _productRepository.GetByIdAsync(productId);

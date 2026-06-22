@@ -11,7 +11,7 @@ namespace CRM.Domain.Entities
         public decimal Price { get; set; }
         public int Stock { get; set; }
 
-        public virtual ICollection<Deal>? Deals { get; set; }
+        public virtual ICollection<DealLineItem>? DealItems { get; set; }
 
     }
 }

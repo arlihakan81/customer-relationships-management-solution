@@ -12,13 +12,16 @@ namespace CRM.Infrastructure.Repositories
 
         public override async Task<IEnumerable<Contact>?> GetAllAsync(int page = 1, int limit = 100, Expression<Func<Contact, bool>>? expression = null)
         {
-            return expression is null ? await _context.Contacts.Include(c => c.Customer).Skip((page-1)*limit).Take(limit).ToListAsync() 
-                : await _context.Contacts.Include(c => c.Customer).Where(expression).Skip((page-1)*limit).Take(limit).ToListAsync();
+            var query = _context.Contacts.Include(c => c.Company).AsQueryable();
+            if (query is null)
+                return null;
+            return expression is null ? await query.Skip((page-1)*limit).Take(limit).ToListAsync() 
+                : await query.Where(expression).Skip((page-1)*limit).Take(limit).ToListAsync();
         }
 
         public override async Task<Contact?> GetByIdAsync(Guid id)
         {
-            return await _context.Contacts.Include(c => c.Customer).FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Contacts.Include(c => c.Company).FirstOrDefaultAsync(c => c.Id == id);
         }
 
 

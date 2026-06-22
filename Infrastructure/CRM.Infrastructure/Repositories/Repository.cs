@@ -10,7 +10,7 @@ namespace CRM.Infrastructure.Repositories
     {
         private readonly AppDbContext _context = context;
 
-        public async Task AddAsync(T entity)
+        public virtual async Task AddAsync(T entity)
         {
             _context.Set<T>().Add(entity);
             await _context.SaveChangesAsync();

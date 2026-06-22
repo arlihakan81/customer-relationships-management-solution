@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CRM.Application.Dtos.Contact;
-using CRM.Application.Dtos.Customer;
+using CRM.Application.Dtos.Company;
 using CRM.Application.Dtos.Lead;
 using CRM.Application.Dtos.Label;
 using CRM.Application.Dtos.LeadSource;
@@ -10,7 +10,7 @@ using CRM.Application.Dtos.Product;
 using CRM.Application.Dtos.Pipeline;
 using CRM.Application.Dtos.Stage;
 using CRM.Application.Dtos.Deal;
-using CRM.Application.Dtos.DealItem;
+using CRM.Application.Dtos.DealLineItem;
 
 namespace CRM.Application.Mapping
 {
@@ -18,11 +18,12 @@ namespace CRM.Application.Mapping
     {
         public MapProfile()
         {
-            CreateMap<Customer, CustomerDto>().ForMember(des => des.CustomerId, opt => opt.MapFrom(src => src.Id));
-            CreateMap<CreateCustomerDto, Customer>();
+            CreateMap<Company, CompanyDto>();
+            CreateMap<Company, CompanyDetailDto>();
+            CreateMap<CreateCompanyDto, Company>();
 
             CreateMap<Contact, ContactDto>().ForMember(des => des.ContactId, opt => opt.MapFrom(src => src.Id))
-                .ForMember(des => des.Customer, opt => opt.MapFrom(src => src.Customer));
+                .ForMember(des => des.Company, opt => opt.MapFrom(src => src.Company));
             CreateMap<CreateContactDto, Contact>();
 
             CreateMap<Lead, LeadDto>().ForMember(des => des.LeadId, opt => opt.MapFrom(src => src.Id))
@@ -63,11 +64,12 @@ namespace CRM.Application.Mapping
                 .ForMember(des => des.ModifiedDate, opt => opt.MapFrom(src => src.ModifiedAt));
             CreateMap<CreateDealDto, Deal>();
 
-            CreateMap<DealItem, DealItemDto>().ForMember(des => des.ProductId, opt => opt.MapFrom(src => src.ProductId))
-                .ForMember(des => des.Quantity, opt => opt.MapFrom(src => src.Quantity))
-                .ForMember(des => des.Price, opt => opt.MapFrom(src => src.UnitPrice));
+            CreateMap<DealLineItemDto, DealLineItem>()
+            .ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+            .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.Price));
 
-            CreateMap<DealItemDto, Product>();
+            CreateMap<CreateDealLineItemDto, DealLineItem>();
 
         }
 

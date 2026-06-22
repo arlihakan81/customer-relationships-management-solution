@@ -2,14 +2,18 @@
 
 namespace CRM.Domain.Entities
 {
-    public class Contact : BaseEntity<Guid>
+    public class Company : BaseEntity<Guid>
     {
         public string? Avatar { get; set; }
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string? Phone { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string? Phone { get; set; }
         public string? AlternatePhone { get; set; }
+        public string? Fax { get; set; }
+        public string? Website { get; set; }
+        public string? Source { get; set; }
+        public string? Industry { get; set; }
         public string? StreetAddress { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
@@ -20,11 +24,11 @@ namespace CRM.Domain.Entities
         public string? LinkedIn { get; set; }
         public string? Whatsapp { get; set; }
         public string? X_Url { get; set; }
-        public Guid CompanyId { get; set; }
+        public bool Status { get; set; }
         public Guid OwnerId { get; set; }
-        public virtual Company Company { get; set; } = null!;
-        public virtual User Owner { get; set; } = null!;
 
+        public virtual ICollection<Contact>? Contacts { get; set; }
+        public virtual User Owner { get; set; } = null!;
 
 
     }

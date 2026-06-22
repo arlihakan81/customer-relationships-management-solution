@@ -2,7 +2,7 @@
 
 namespace CRM.Application.Repositories
 {
-    public interface ICustomerRepository : IRepository<Customer>
+    public interface ICompanyRepository : IRepository<Company>
     {
     }
 }

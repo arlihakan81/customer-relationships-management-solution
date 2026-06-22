@@ -9,7 +9,7 @@ namespace CRM.Application.Dtos.Deal
         public decimal Amount { get; set; }
         public Guid StageId { get; set; }
         public DateTime CloseDate { get; set; }
-        public Guid CustomerId { get; set; }
+        public Guid CompanyId { get; set; }
         public Guid? ContactId { get; set; }
         public decimal ExpectedRevenue { get; set; }
         public DateTime CreatedDate { get; set; }

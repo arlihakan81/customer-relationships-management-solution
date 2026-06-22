@@ -11,9 +11,11 @@
         public bool IsEmailConfirmed { get; set; } = false;
         public int RoleId { get; set; }
         public Guid OrganizationId { get; set; }
-        
-        public virtual Role Role { get; set; }
-        public virtual Organization Organization { get; set; }
+
+        public virtual Role Role { get; set; } = null!;
+        public virtual Organization Organization { get; set; } = null!;
+        public virtual ICollection<Company>? Companies { get; set; }
+        public virtual ICollection<Contact>? Contacts { get; set; }
 
     }
 }

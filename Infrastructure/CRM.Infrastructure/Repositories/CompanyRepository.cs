@@ -4,7 +4,7 @@ using CRM.Infrastructure.Contexts;
 
 namespace CRM.Infrastructure.Repositories
 {
-    public class CustomerRepository(AppDbContext context) : Repository<Customer>(context), ICustomerRepository
+    public class CompanyRepository(AppDbContext context) : Repository<Company>(context), ICompanyRepository
     {
 
 

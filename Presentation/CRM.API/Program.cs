@@ -7,6 +7,7 @@ using CRM.Infrastructure.Services;
 using CRM.Application.Mapping;
 using CRM.Application.Repositories;
 using CRM.Infrastructure.Repositories;
+using CRM.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,8 +83,8 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthenticateService, AuthenticateService>();
 builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IContactService, ContactService>();
@@ -117,6 +118,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandler>();
 
 app.UseHttpsRedirection();
 

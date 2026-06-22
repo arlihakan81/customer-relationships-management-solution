@@ -1,4 +1,4 @@
-﻿using CRM.Application.Dtos.Customer;
+﻿using CRM.Application.Dtos.Company;
 
 namespace CRM.Application.Dtos.Contact
 {
@@ -9,6 +9,6 @@ namespace CRM.Application.Dtos.Contact
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public string? Address { get; set; }
-        public virtual CustomerDto Customer { get; set; }
+        public virtual CompanyDto Company { get; set; } = null!;
     }
 }

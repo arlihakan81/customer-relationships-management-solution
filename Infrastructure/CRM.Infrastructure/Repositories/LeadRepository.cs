@@ -26,18 +26,17 @@ namespace CRM.Infrastructure.Repositories
             var lead = _context.Leads.FirstOrDefault(l => l.Id == leadId) ??  
                 throw new Exception("Lead not found");
             lead.IsConverted = true;
-            _context.Customers.Add(new Customer
+            _context.Companies.Add(new Company
             {
                 Name = lead.Company,
                 Email = lead.Email,
-                Phone = lead.Phone,
-                Address = lead.Address,
                 Contacts = [
                     new Contact {
-                        Name = lead.Name,
+                        FirstName = lead.Name,
+                        LastName = lead.Name,
                         Email = lead.Email,
                         Phone = lead.Phone,
-                        Address = lead.Address
+                        StreetAddress = lead.Address
                     }
                 ]
             });
