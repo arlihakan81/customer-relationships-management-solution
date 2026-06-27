@@ -1,5 +1,7 @@
 ﻿using CRM.Application.Dtos.Pipeline;
+using CRM.Application.Dtos.Stage;
 using CRM.Application.Interfaces;
+using CRM.Application.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +20,7 @@ namespace CRM.API.Controllers
         public async Task<IActionResult> GetAllPipelines([FromQuery] int page = 1, [FromQuery]int limit = 100, [FromQuery]string? filter = null)
         {
             var pipelines = await _pipelineService.GetAllPipelinesAsync(page, limit, filter);
-            return Ok(pipelines);
+            return pipelines is null || !pipelines.Any() ? Ok(BaseResponse<PipelineDto>.FailureResult(error: "No pipelines found")) : Ok(BaseResponse<PipelineDto>.SuccessResult(data: pipelines, page, limit));
         }
 
         [HttpGet]
@@ -26,7 +28,7 @@ namespace CRM.API.Controllers
         public async Task<IActionResult> GetStagesByPipelineId(Guid id)
         {
             var stages = await _stageService.GetStagesByPipelineIdAsync(id);
-            return Ok(stages);
+            return stages is null || !stages.Any() ? Ok(BaseResponse<StageDto>.FailureResult(error: "No stages by provided pipeline id")) : Ok(BaseResponse<StageDto>.SuccessResult(data: stages, 1, 10));
         }
 
         [HttpPost]
@@ -42,9 +44,9 @@ namespace CRM.API.Controllers
             var pipeline = await _pipelineService.GetPipelineByIdAsync(id);
             if (pipeline is null)
             {
-                return NotFound();
+                return Ok(BaseResponse<PipelineDto>.FailureResult(error: "No pipeline by provided pipeline id"));
             }
-            return Ok(pipeline);
+            return Ok(BaseResponse<PipelineDto>.SuccessResult(data: pipeline, message: "Pipeline retrieved by provided pipeline id successfully"));
         }
 
         [HttpPut("{id}")]

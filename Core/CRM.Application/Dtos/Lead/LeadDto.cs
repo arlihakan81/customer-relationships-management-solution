@@ -1,5 +1,5 @@
 ﻿using CRM.Application.Dtos.Label;
-using CRM.Application.Dtos.LeadSource;
+using CRM.Application.Dtos.Source;
 
 namespace CRM.Application.Dtos.Lead
 {
@@ -12,7 +12,7 @@ namespace CRM.Application.Dtos.Lead
         public string Title { get; set; } = string.Empty;
         public string Company { get; set; } = string.Empty;
         public bool IsConverted { get; set; } = false;
-        public LeadSourceDto Source { get; set; } = null!;
+        public SourceDto Source { get; set; } = null!;
         public DateTime CreatedDate { get; set; }
 
         public virtual ICollection<LabelDto>? Labels { get; set; }

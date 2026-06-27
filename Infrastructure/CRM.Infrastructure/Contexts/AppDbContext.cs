@@ -15,7 +15,7 @@ namespace CRM.Infrastructure.Contexts
         public DbSet<Company> Companies { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Lead> Leads { get; set; }
-        public DbSet<LeadSource> LeadSources { get; set; }
+        public DbSet<Source> Sources { get; set; }
         public DbSet<LeadLabel> LeadLabels { get; set; }
         public DbSet<Label> Labels { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -35,7 +35,7 @@ namespace CRM.Infrastructure.Contexts
             modelBuilder.Entity<Company>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);
             modelBuilder.Entity<Contact>().HasQueryFilter(c => c.OrganizationId == _organizationService.GetCurrentOrganizationId() && !c.IsDeleted);
             modelBuilder.Entity<Lead>().HasQueryFilter(l => l.OrganizationId == _organizationService.GetCurrentOrganizationId() && !l.IsDeleted);
-            modelBuilder.Entity<LeadSource>().HasQueryFilter(ls => ls.OrganizationId == _organizationService.GetCurrentOrganizationId() && !ls.IsDeleted);
+            modelBuilder.Entity<Source>().HasQueryFilter(ls => ls.OrganizationId == _organizationService.GetCurrentOrganizationId() && !ls.IsDeleted);
             modelBuilder.Entity<LeadLabel>().HasQueryFilter(ll => ll.OrganizationId == _organizationService.GetCurrentOrganizationId() && !ll.IsDeleted);
             modelBuilder.Entity<Label>().HasQueryFilter(l => l.OrganizationId == _organizationService.GetCurrentOrganizationId() && !l.IsDeleted); 
             modelBuilder.Entity<Product>().HasQueryFilter(p => p.OrganizationId == _organizationService.GetCurrentOrganizationId() && !p.IsDeleted); 
@@ -58,9 +58,9 @@ namespace CRM.Infrastructure.Contexts
             modelBuilder.Entity<Lead>().HasOne(l => l.ModifiedBy).WithMany().HasForeignKey(l => l.ModifiedById);
             modelBuilder.Entity<Lead>().HasOne(l => l.DeletedBy).WithMany().HasForeignKey(l => l.DeletedById);
 
-            modelBuilder.Entity<LeadSource>().HasOne(ls => ls.CreatedBy).WithMany().HasForeignKey(ls => ls.CreatedById).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<LeadSource>().HasOne(ls => ls.ModifiedBy).WithMany().HasForeignKey(ls => ls.ModifiedById);
-            modelBuilder.Entity<LeadSource>().HasOne(ls => ls.DeletedBy).WithMany().HasForeignKey(ls => ls.DeletedById);
+            modelBuilder.Entity<Source>().HasOne(ls => ls.CreatedBy).WithMany().HasForeignKey(ls => ls.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Source>().HasOne(ls => ls.ModifiedBy).WithMany().HasForeignKey(ls => ls.ModifiedById);
+            modelBuilder.Entity<Source>().HasOne(ls => ls.DeletedBy).WithMany().HasForeignKey(ls => ls.DeletedById);
 
             modelBuilder.Entity<LeadLabel>().HasOne(ll => ll.CreatedBy).WithMany().HasForeignKey(ll => ll.CreatedById).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<LeadLabel>().HasOne(ll => ll.ModifiedBy).WithMany().HasForeignKey(ll => ll.ModifiedById);
@@ -94,10 +94,14 @@ namespace CRM.Infrastructure.Contexts
             modelBuilder.Entity<Role>().HasData([
                 new Role {
                     Id = 1,
-                    Name = "Admin"
+                    Name = "Super Admin"
                 },
                 new Role {
                     Id = 2,
+                    Name = "Admin"
+                },
+                new Role {
+                    Id = 3,
                     Name = "User"
                 }
                 ]);

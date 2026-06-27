@@ -92,8 +92,8 @@ builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 builder.Services.AddScoped<ILeadService, LeadService>();
 
-builder.Services.AddScoped<ILeadSourceRepository, LeadSourceRepository>();
-builder.Services.AddScoped<ILeadSourceService, LeadSourceService>();
+builder.Services.AddScoped<ISourceRepository, SourceRepository>();
+builder.Services.AddScoped<ISourceService, SourceService>();
 
 builder.Services.AddScoped<ILabelRepository, LabelRepository>();
 builder.Services.AddScoped<ILabelService, LabelService>();

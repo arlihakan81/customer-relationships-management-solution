@@ -12,7 +12,7 @@ namespace CRM.Domain.Entities
         public string? AlternatePhone { get; set; }
         public string? Fax { get; set; }
         public string? Website { get; set; }
-        public string? Source { get; set; }
+        public Guid SourceId { get; set; }
         public string? Industry { get; set; }
         public string? StreetAddress { get; set; }
         public string? City { get; set; }
@@ -26,6 +26,8 @@ namespace CRM.Domain.Entities
         public string? X_Url { get; set; }
         public bool Status { get; set; }
         public Guid OwnerId { get; set; }
+
+        public virtual Source Source { get; set; } = null!;
 
         public virtual ICollection<Contact>? Contacts { get; set; }
         public virtual User Owner { get; set; } = null!;

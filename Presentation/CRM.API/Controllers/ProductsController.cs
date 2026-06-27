@@ -1,5 +1,6 @@
 ﻿using CRM.Application.Dtos.Product;
 using CRM.Application.Interfaces;
+using CRM.Application.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,11 @@ namespace CRM.API.Controllers
         public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int limit = 100, [FromQuery] string? filter = null)
         {
             var products = await _productService.GetAllProductsAsync(page, limit, filter);
-            if (products is null)
+            if (products is null || !products.Any())
             {
-                return Ok(new List<Application.Dtos.Product.ProductDto>());
+                return Ok(BaseResponse<ProductDto>.FailureResult(error: "No items found", message: "No Items "));
             }
-            return Ok(products);
+            return Ok(BaseResponse<ProductDto>.SuccessResult(products, page, limit, message: "Items retrieved successfully"));
         }
 
         [HttpGet("{id}")]
@@ -30,9 +31,9 @@ namespace CRM.API.Controllers
             var product = await _productService.GetProductByIdAsync(id);
             if (product is null)
             {
-                return NotFound();
+                return Ok(BaseResponse<ProductDto>.FailureResult(error: "No item by provided item id"));
             }
-            return Ok(product);
+            return Ok(BaseResponse<ProductDto>.SuccessResult(data: product));
         }
 
         [HttpPost]

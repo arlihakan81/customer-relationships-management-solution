@@ -6,6 +6,7 @@ namespace CRM.Application.Dtos.Deal
     {
         public string Name { get; set; } = string.Empty;
         public Guid StageId { get; set; }
+        public decimal? Amount { get; set; }
         public DateTime CloseDate { get; set; }
         public Guid CompanyId { get; set; }
         public Guid? ContactId { get; set; }

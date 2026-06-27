@@ -45,7 +45,7 @@ namespace CRM.Infrastructure.Services
                         Name = request.Name,
                         Email = request.Email,
                         PasswordHash = new PasswordHasher<User>().HashPassword(null!, request.Password),
-                        RoleId = _context.Roles.FirstOrDefault(r => r.Name == "Admin")!.Id
+                        RoleId = _context.Roles.FirstOrDefault(r => r.Name == "Super Admin")!.Id
                     }
                 ]
             };

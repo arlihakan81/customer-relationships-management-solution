@@ -3,7 +3,7 @@ using CRM.Application.Dtos.Contact;
 using CRM.Application.Dtos.Company;
 using CRM.Application.Dtos.Lead;
 using CRM.Application.Dtos.Label;
-using CRM.Application.Dtos.LeadSource;
+using CRM.Application.Dtos.Source;
 using CRM.Domain.Entities;
 using CRM.Application.Dtos.LeadLabel;
 using CRM.Application.Dtos.Product;
@@ -32,10 +32,10 @@ namespace CRM.Application.Mapping
                 .ForMember(des => des.Labels, opt => opt.MapFrom(src => src.Labels));
             CreateMap<CreateLeadDto, Lead>();
 
-            CreateMap<LeadSource, LeadSourceDto>().ForMember(des => des.LeadSourceId, opt => opt.MapFrom(src => src.Id))
+            CreateMap<Source, SourceDto>().ForMember(des => des.SourceId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(des => des.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt))
                 .ForMember(des => des.ModifiedDate, opt => opt.MapFrom(src => src.ModifiedAt));
-            CreateMap<CreateLeadSourceDto, LeadSource>();
+            CreateMap<CreateSourceDto, Source>();
 
             CreateMap<Label, LabelDto>().ForMember(des => des.LabelId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(des => des.CreatedDate, opt => opt.MapFrom(src => src.CreatedAt))

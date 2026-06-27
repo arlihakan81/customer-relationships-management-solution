@@ -20,6 +20,7 @@ namespace CRM.Domain.Entities
         public string? LinkedIn { get; set; }
         public string? Whatsapp { get; set; }
         public string? X_Url { get; set; }
+        public string? Description { get; set; }
         public Guid CompanyId { get; set; }
         public Guid OwnerId { get; set; }
         public virtual Company Company { get; set; } = null!;

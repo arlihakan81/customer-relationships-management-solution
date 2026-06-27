@@ -25,7 +25,7 @@ namespace CRM.Domain.Entities
         }
         public Guid StageId { get; set; }
         public DateTime ExpectedCloseDate { get; set; }
-        public Guid AccountId { get; set; }
+        public Guid CompanyId { get; set; }
         public Guid? ContactId { get; set; }
         public decimal? ExpectedRevenue
         {
@@ -38,7 +38,7 @@ namespace CRM.Domain.Entities
             }
         }
         public virtual Stage Stage { get; set; } = null!;
-
+        public Enums.Status Status { get; set; } = Enums.Status.Open;
         public virtual Company Company { get; set; } = null!;
         public virtual Contact? Contact { get; set; }
         public virtual ICollection<DealLineItem>? Items { get; set; }

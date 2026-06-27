@@ -10,7 +10,7 @@
         public string? AlternatePhone { get; set; }
         public string? Fax { get; set; }
         public string? Website { get; set; }
-        public string? Source { get; set; }
+        public Guid SourceId { get; set; }
         public string? Industry { get; set; }
         public string? StreetAddress { get; set; }
         public string? City { get; set; }

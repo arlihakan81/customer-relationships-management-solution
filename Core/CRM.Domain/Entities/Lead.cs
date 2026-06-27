@@ -13,7 +13,7 @@ namespace CRM.Domain.Entities
         public bool IsConverted { get; set; } = false;
         public string Address { get; set; } = string.Empty;
 
-        public virtual LeadSource Source { get; set; } = null!;
+        public virtual Source Source { get; set; } = null!;
         public virtual ICollection<LeadLabel>? LeadLabels { get; set; }
         public virtual ICollection<Label>? Labels { get; set; }
 

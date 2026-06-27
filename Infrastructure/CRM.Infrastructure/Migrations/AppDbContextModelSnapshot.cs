@@ -99,8 +99,8 @@ namespace CRM.Infrastructure.Migrations
                     b.Property<string>("Skype")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Source")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("SourceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
@@ -131,6 +131,8 @@ namespace CRM.Infrastructure.Migrations
                     b.HasIndex("OrganizationId");
 
                     b.HasIndex("OwnerId");
+
+                    b.HasIndex("SourceId");
 
                     b.ToTable("Companies");
                 });
@@ -167,6 +169,9 @@ namespace CRM.Infrastructure.Migrations
 
                     b.Property<Guid?>("DeletedById")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -245,9 +250,6 @@ namespace CRM.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -287,6 +289,9 @@ namespace CRM.Infrastructure.Migrations
 
                     b.Property<Guid>("StageId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("Value")
                         .HasColumnType("decimal(18,2)");
@@ -548,53 +553,6 @@ namespace CRM.Infrastructure.Migrations
                     b.ToTable("LeadLabels");
                 });
 
-            modelBuilder.Entity("CRM.Domain.Entities.LeadSource", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("ModifiedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("DeletedById");
-
-                    b.HasIndex("ModifiedById");
-
-                    b.HasIndex("OrganizationId");
-
-                    b.ToTable("LeadSources");
-                });
-
             modelBuilder.Entity("CRM.Domain.Entities.Organization", b =>
                 {
                     b.Property<Guid>("Id")
@@ -758,15 +716,68 @@ namespace CRM.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2026, 6, 22, 23, 48, 14, 111, DateTimeKind.Local).AddTicks(4076),
-                            Name = "Admin"
+                            CreatedAt = new DateTime(2026, 6, 27, 17, 4, 4, 858, DateTimeKind.Local).AddTicks(6487),
+                            Name = "Super Admin"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2026, 6, 22, 23, 48, 14, 111, DateTimeKind.Local).AddTicks(4185),
+                            CreatedAt = new DateTime(2026, 6, 27, 17, 4, 4, 858, DateTimeKind.Local).AddTicks(6502),
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 6, 27, 17, 4, 4, 858, DateTimeKind.Local).AddTicks(6504),
                             Name = "User"
                         });
+                });
+
+            modelBuilder.Entity("CRM.Domain.Entities.Source", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("DeletedById");
+
+                    b.HasIndex("ModifiedById");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("Sources");
                 });
 
             modelBuilder.Entity("CRM.Domain.Entities.Stage", b =>
@@ -900,6 +911,12 @@ namespace CRM.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("CRM.Domain.Entities.Source", "Source")
+                        .WithMany()
+                        .HasForeignKey("SourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("CreatedBy");
 
                     b.Navigation("DeletedBy");
@@ -909,6 +926,8 @@ namespace CRM.Infrastructure.Migrations
                     b.Navigation("Organization");
 
                     b.Navigation("Owner");
+
+                    b.Navigation("Source");
                 });
 
             modelBuilder.Entity("CRM.Domain.Entities.Contact", b =>
@@ -1111,7 +1130,7 @@ namespace CRM.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CRM.Domain.Entities.LeadSource", "Source")
+                    b.HasOne("CRM.Domain.Entities.Source", "Source")
                         .WithMany()
                         .HasForeignKey("SourceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1175,37 +1194,6 @@ namespace CRM.Infrastructure.Migrations
                     b.Navigation("Organization");
                 });
 
-            modelBuilder.Entity("CRM.Domain.Entities.LeadSource", b =>
-                {
-                    b.HasOne("CRM.Domain.Entities.User", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("CRM.Domain.Entities.User", "DeletedBy")
-                        .WithMany()
-                        .HasForeignKey("DeletedById");
-
-                    b.HasOne("CRM.Domain.Entities.User", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById");
-
-                    b.HasOne("CRM.Domain.Entities.Organization", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("DeletedBy");
-
-                    b.Navigation("ModifiedBy");
-
-                    b.Navigation("Organization");
-                });
-
             modelBuilder.Entity("CRM.Domain.Entities.Pipeline", b =>
                 {
                     b.HasOne("CRM.Domain.Entities.User", "CreatedBy")
@@ -1238,6 +1226,37 @@ namespace CRM.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("CRM.Domain.Entities.Product", b =>
+                {
+                    b.HasOne("CRM.Domain.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CRM.Domain.Entities.User", "DeletedBy")
+                        .WithMany()
+                        .HasForeignKey("DeletedById");
+
+                    b.HasOne("CRM.Domain.Entities.User", "ModifiedBy")
+                        .WithMany()
+                        .HasForeignKey("ModifiedById");
+
+                    b.HasOne("CRM.Domain.Entities.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("DeletedBy");
+
+                    b.Navigation("ModifiedBy");
+
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("CRM.Domain.Entities.Source", b =>
                 {
                     b.HasOne("CRM.Domain.Entities.User", "CreatedBy")
                         .WithMany()
