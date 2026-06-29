@@ -35,7 +35,7 @@ namespace CRM.API.Middlewares
             {
                 // Bizim fırlattığımız bilerek yapılan kısıtlamalar (Örn: "Müşteri bulunamadı")
                 statusCode = HttpStatusCode.BadRequest; // 400
-                errorMessage = businessException.Message;
+                errorMessage = businessException.InnerException!.ToString();
             }
             else if (exception is UnauthorizedAccessException)
             {

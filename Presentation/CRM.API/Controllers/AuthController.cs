@@ -20,7 +20,7 @@ namespace CRM.API.Controllers
             var token = await _authService.AuthenticateAsync(request.Email, request.Password);
             if (token == null)
                 return Unauthorized();
-            return Ok(new { Token = token });
+            return Ok(token);
         }
 
         [HttpPost("register")]

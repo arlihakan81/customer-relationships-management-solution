@@ -73,6 +73,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true
             };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    // Cookie'den token oku
+                    var token = context.Request.Cookies["JWToken"];
+                    if (!string.IsNullOrEmpty(token))
+                    {
+                        context.Token = token;
+                    }
+                    return Task.CompletedTask;
+                }
+            };
         }
     );
 
@@ -110,6 +124,17 @@ builder.Services.AddScoped<IStageService, StageService>();
 builder.Services.AddScoped<IDealRepository, DealRepository>();
 builder.Services.AddScoped<IDealService, DealService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.WithOrigins("https://localhost:7084")
+               .AllowAnyHeader()
+               .WithMethods("GET", "POST", "PUT", "DELETE")
+               .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -120,6 +145,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionHandler>();
+
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 

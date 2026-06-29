@@ -30,6 +30,7 @@ namespace CRM.Domain.Entities
         public virtual Source Source { get; set; } = null!;
 
         public virtual ICollection<Contact>? Contacts { get; set; }
+        public virtual ICollection<Deal>? Deals { get; set; }
         public virtual User Owner { get; set; } = null!;
 
 

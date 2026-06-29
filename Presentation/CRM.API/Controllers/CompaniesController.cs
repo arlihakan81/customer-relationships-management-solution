@@ -51,7 +51,7 @@ namespace CRM.API.Controllers
         public async Task<IActionResult> Put(Guid id, [FromBody] UpdateAccountDto request)
         {
             await _companyService.UpdateAsync(id, request);
-            return NoContent();
+            return Ok("Güncelleme başarılı");
         }
 
         [HttpDelete("{id}")]
